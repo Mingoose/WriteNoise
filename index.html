@@ -1,0 +1,199 @@
+<!DOCTYPE HTML>
+<!--
+	Stellar by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Sound to Image</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}" />
+		<noscript><link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header" class="alt">
+						<span class="logo"><img src="images/logo.svg" alt="" /></span>
+						<h1>Stellar</h1>
+						<!--<p>Just another free, fully responsive site template<br />
+						built by <a href="https://twitter.com/ajlkn">@ajlkn</a> for <a href="https://html5up.net">HTML5 UP</a>.</p>-->
+					</header>
+
+				<!-- Nav -->
+					<nav id="nav">
+						<ul>
+							<li><a href="#intro" class="active">Home</a></li>
+							<li><a href="#first">Process</a></li>
+							<!--<li><a href="#second">Second Section</a></li>-->
+							<!-- <li><a href="#cta">Get Started</a></li> -->
+						</ul>
+					</nav>
+
+				<!-- Main -->
+					<div id="main">
+
+						<!-- Introduction -->
+							<section id="intro" class="main">
+								<div class="spotlight">
+									<div class="content">
+										<header class="major">
+											<h2>WRITE NOISE</h2>
+										</header>
+										<p>Here is our website to convert a sound into an image based on the bits available. We do it by
+											taking in a .wav file and analyzing it through an algorithm. These values are put into the bits of an image.</p>
+										<!-- <form method="POST" action="" enctype="multipart/form-data">
+											<input type="file" id="myFile" name="file">
+											<input type="submit">
+										</form> -->
+									</div>
+									<span class="image"><img src="images/pic01.jpg" alt="" /></span>
+								</div>
+								<footer class="major">
+									<ul class="actions special">
+										<li><a href=generic class="button">Go to Converter</a></li>
+									</ul>
+								</footer>
+							</section>
+
+						<!-- First Section -->
+							<section id="first" class="main special">
+								<header class="major">
+									<h2>Process</h2>
+								</header>
+								<!-- <ul class="features">
+									<li>
+										<span class="icon solid major style1 fa-code"></span>
+										<h3>Ipsum consequat</h3>
+										<p>Sed lorem amet ipsum dolor et amet nullam consequat a feugiat consequat tempus veroeros sed consequat.</p>
+									</li>
+									<li>
+										<span class="icon major style3 fa-copy"></span>
+										<h3>Amed sed feugiat</h3>
+										<p>Sed lorem amet ipsum dolor et amet nullam consequat a feugiat consequat tempus veroeros sed consequat.</p>
+									</li>
+									<li>
+										<span class="icon major style5 fa-gem"></span>
+										<h3>Dolor nullam</h3>
+										<p>Sed lorem amet ipsum dolor et amet nullam consequat a feugiat consequat tempus veroeros sed consequat.</p>
+									</li>
+								</ul> -->
+								<p>This project has been a wild ride. Coming into this hackathon with little information as to what we as a group wanted to create, it felt like an impossible task to get any meaningful work done within about the 36 hours. The first three hours were spent on hard brainstorming, splashing our mini-white board with as many ideas that we could think of.  Simulation of living without glasses, simulation of colorblindness, a calorie fitness app, a Youtube addiction-curber, a Bridge AI. There were so many problems that we wanted to solve, but nothing stood out for all four of us. Right before dinner time hit, I thought about the incredibly cool animations of the old Windows Media Player had. You know, the swirly, trippy, colorful images that played in sync with you song? I thought that’d be incredibly cool to make. Kurt, though, thought of an even better idea: representing an audio file by a singular image. Not everyone was for this idea, initially, as we kind of thought of it as a joke concept at first. Like, how hard could it be to convert bits to bits? It’ll be easy weekend. </p>
+								<p>Challenges started to arise deep into Friday night though. As we thought about it more, we concluded it was a conflict of whether we wanted the image to be a one-to-one conversion or an artistic representation. On one hand, it would be extremely cool and useful to have an image completely represent a sound. It would be great for encoding information in the physical world and act as “QR code” for sound. On the other hand, the idea of seeing a computer-generated picture and immediately understanding what a song’s tone and vibe was extremely satisfying too. We went to sleep, nervous but excited, with an idea that we knew had a lot of potential.</p>
+								<p>Saturday morning, we drew up the semblance of a plan. The plan was to convert the song’s raw bit data into the fields of the pixels of the image, and that newly created image would then be multiplied by invertible transformation  matrices created dependent on analyses of the audio’s unique characteristics (frequency, amplitude, key, length, etc). We each divided the work by section: Ethan primarily worked on the audio-to-image conversion algorithm, Morris worked on the developing our dynamic website, I worked on the transformations, and Kurt was a helper that greatly contributed to all three. In all three, we had major obstacles that weren’t foreseen.</p>
+								<p>Ethan developed two algorithms, one that converts a .wav file to an image and one that converts an image back into a .wav file. For the .wav to image conversion, we assumed that the .wav file would be a 16-bit file as that is what is most common. We needed to convert these 16-bit data points into a 32-bit pixel, so we did the following. We broke up bits 2-16 and assigned them to be bits in the RGB values of a pixel. We distributed the bits such that the most significant bits in the input were the most significant bits in the colors. We then padded the rest of the RGB values such that they were each 8 bits long. Next, we used the first bit (signed bit) in the input to determine the alpha value of the pixel. If the bit was positive the alpha was 255 and if negative the alpha was 128. The exact opposite process was used to turn an image back into a .wav file. The algorithms are designed such that if you run a file through one of the algorithms and then use the outputted file in the other algorithm, the final output will be the original file.</p>
+								<p>I looked at the characteristics of music and how to extract that information from an audio file. I was able to find the average frequency rather easily, as well as the average amplitude. The one obstacle that I faced was the finding the key. I innocently thought that it would be easy converting the song to a MIDI file and have an algorithm analyze the key. It was not. After 5 hours of searching, I came to the sinking conclusion that the conversion could only take place in Python 2.7, when the rest of the project was being written for Python 3.8. While searches of version control with virtualenv gave me hope, we simply didn’t have enough time to implement it. Saddened but not discouraged, I still wanted to overlay two sin waves of the sound file’s unique frequency and amplitude. But because so much time was spent as a group in developing the website and algorithm, these features had to be ultimately cut. Alas, a project made in less than 2 days won’t always go according to plan.</p>
+								<p>Morris and Kurt spent Saturday afternoon finding out exactly what kind of website solution we wanted to go through. We as a group had a little experience with web development, let alone dynamic website development. They juggled with the idea of Firebase with Google Cloud, but the ultimate solution was Flask. With a Frankenstein of google searches and snippets of a previous Flask solution  that Ethan worked on, at midnight we achieved perfection: a website that could legitimately take a file upload and not die. We were so excited that I think Morris’s scream at 1 AM woke up the whole dorm.
+
+									-	Charlie</p>
+								
+								<footer class="major">
+									<ul class="actions special">
+										<li><a href=generic class="button">Go to Converter</a></li>
+									</ul>
+								</footer>
+							</section>
+
+						<!-- Second Section -->
+							<!-- <section id="second" class="main special">
+								<header class="major">
+									<h2>Ipsum consequat</h2>
+									<p>Donec imperdiet consequat consequat. Suspendisse feugiat congue<br />
+									posuere. Nulla massa urna, fermentum eget quam aliquet.</p>
+								</header>
+								<ul class="statistics">
+									<li class="style1">
+										<span class="icon solid fa-code-branch"></span>
+										<strong>5,120</strong> Etiam
+									</li>
+									<li class="style2">
+										<span class="icon fa-folder-open"></span>
+										<strong>8,192</strong> Magna
+									</li>
+									<li class="style3">
+										<span class="icon solid fa-signal"></span>
+										<strong>2,048</strong> Tempus
+									</li>
+									<li class="style4">
+										<span class="icon solid fa-laptop"></span>
+										<strong>4,096</strong> Aliquam
+									</li>
+									<li class="style5">
+										<span class="icon fa-gem"></span>
+										<strong>1,024</strong> Nullam
+									</li>
+								</ul>
+								<p class="content">Nam elementum nisl et mi a commodo porttitor. Morbi sit amet nisl eu arcu faucibus hendrerit vel a risus. Nam a orci mi, elementum ac arcu sit amet, fermentum pellentesque et purus. Integer maximus varius lorem, sed convallis diam accumsan sed. Etiam porttitor placerat sapien, sed eleifend a enim pulvinar faucibus semper quis ut arcu. Ut non nisl a mollis est efficitur vestibulum. Integer eget purus nec nulla mattis et accumsan ut magna libero. Morbi auctor iaculis porttitor. Sed ut magna ac risus et hendrerit scelerisque. Praesent eleifend lacus in lectus aliquam porta. Cras eu ornare dui curabitur lacinia.</p>
+								<footer class="major">
+									<ul class="actions special">
+										<li><a href=generic class="button">Learn More</a></li>
+									</ul>
+								</footer>
+							</section> -->
+
+						<!-- Get Started -->
+							<!-- <section id="cta" class="main special">
+								<header class="major">
+									<h2>Congue imperdiet</h2>
+									<p>Donec imperdiet consequat consequat. Suspendisse feugiat congue<br />
+									posuere. Nulla massa urna, fermentum eget quam aliquet.</p>
+								</header>
+								<footer class="major">
+									<ul class="actions special">
+										<li><a href= generic class="button primary">Get Started</a></li>
+										<li><a href= generic class="button">Learn More</a></li>
+									</ul>
+								</footer>
+							</section> -->
+
+					</div>
+
+				<!-- Footer -->
+					<footer id="footer">
+						<section>
+							<h2>Two Over One</h2>
+							<p>Morris Wan, Kurt Hu, Ethan Chee, Charlie Liu</p>
+							<ul class="actions">
+								<li><a href="generic" class="button">Go to Coverter</a></li>
+							</ul>
+						</section>
+						<section>
+							<h2>Contact Us!</h2>
+							<dl class="alt">
+								<dt>Address</dt>
+								<dd>630 Williams St NW &bull; Atlanta, GA 30318 &bull; USA</dd>
+								<dt>Phone</dt>
+								<dd>(770) 596-8816 </dd>
+								<dt>Email</dt>
+								<dd><a href="#">mwan36@gatech.edu</a></dd>
+							</dl>
+							<!-- <ul class="icons">
+								<li><a href="#" class="icon brands fa-twitter alt"><span class="label">Twitter</span></a></li>
+								<li><a href="#" class="icon brands fa-facebook-f alt"><span class="label">Facebook</span></a></li>
+								<li><a href="#" class="icon brands fa-instagram alt"><span class="label">Instagram</span></a></li>
+								<li><a href="#" class="icon brands fa-github alt"><span class="label">GitHub</span></a></li>
+								<li><a href="#" class="icon brands fa-dribbble alt"><span class="label">Dribbble</span></a></li>
+							</ul> -->
+						</section>
+						<p class="copyright">&copy; Untitled. Design: <a href="https://html5up.net">HTML5 UP</a>.</p>
+					</footer>
+
+			</div>
+
+		<!-- Scripts -->
+		<!--
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+			-->
+	</body>
+</html>
